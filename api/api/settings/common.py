@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'user',
     'beacon',
+    'import_export',
 ]
 
 REST_FRAMEWORK = {
