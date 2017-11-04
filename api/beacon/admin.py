@@ -4,12 +4,14 @@ from beacon.models import Time, Beacon, Signal
 class SignalInilne(admin.StackedInline):
     model = Signal
 
+
 @admin.register(Time)
 class TimeAdmin(admin.ModelAdmin):
     model = Time
     inlines = [
         SignalInilne,
     ]
+    readonly_fields = ('created_at',)
     fields = ('created_at', 'user', 'beacon_total_number')
 
 @admin.register(Beacon)

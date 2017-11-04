@@ -24,7 +24,6 @@ class TimeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         signals_data = validated_data.pop('signals')
         time = Time.objects.create(**validated_data)
-
         for signal in signals_data:
             uuid = signal.pop('uuid')
             beacon = Beacon.objects.get(uuid=uuid)
