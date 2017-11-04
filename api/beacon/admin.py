@@ -1,12 +1,12 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from beacon.models import Time, Beacon, Signal
 
 class SignalInilne(admin.StackedInline):
     model = Signal
 
-
 @admin.register(Time)
-class TimeAdmin(admin.ModelAdmin):
+class TimeAdmin(ImportExportModelAdmin):
     model = Time
     inlines = [
         SignalInilne,
