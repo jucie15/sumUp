@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from rest_framework import serializers
 from beacon.models import Time, Beacon, Signal
 
@@ -16,9 +17,11 @@ class TimeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         signals_data = validated_data.pop('signals')
-        time = Time.objects.create(**validated_data)
-        for signal in signals_data:
-            uuid = signal['uuid']
-            beacon = get_object_or_404(Beacon, uuid=uuid)
-            Signal.objects.create(time=time, beacon=beacon, **signal)
-        return time
+        with transaction.atomic():
+            # transaction all or nothing
+            time = Time.objects.create(**validated_data)
+            for signal in signals_data:
+                uuid = signal['uuid']
+                beacon, created = Beacon.objects.get_or_create(uuid=uuid)
+                Signal.objects.create(time=time, beacon=beacon, **signal)
+            return time
