@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from beacon.models import Time, Beacon, Signal
 
@@ -18,6 +19,6 @@ class TimeSerializer(serializers.ModelSerializer):
         time = Time.objects.create(**validated_data)
         for signal in signals_data:
             uuid = signal['uuid']
-            beacon = Beacon.objects.get(uuid=uuid)
+            beacon = get_object_or_404(Beacon, uuid=uuid)
             Signal.objects.create(time=time, beacon=beacon, **signal)
         return time
