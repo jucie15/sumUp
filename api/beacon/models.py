@@ -22,6 +22,7 @@ class Time(models.Model):
 class Signal(models.Model):
     beacon = models.ForeignKey(Beacon)
     time = models.ForeignKey(Time, related_name="signals")
+    uuid = models.UUIDField()
     rssi = models.IntegerField(default=0)
 
 
