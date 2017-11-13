@@ -12,6 +12,7 @@ class SignalList(generics.ListCreateAPIView):
 
     serializer_class = TimeSerializer
     queryset = Time.objects.all()
+    filter_fields = ('created_at', 'user')
 
     def location_calculate(self, signals):
         mat_a_col = []

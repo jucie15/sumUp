@@ -13,7 +13,8 @@ class TimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Time
-        fields = ('user', 'beacon_total_number', 'signals', )
+        fields = ('created_at', 'user', 'beacon_total_number', 'signals', )
+        extra_kwargs = {'created_at': {'read_only': True}}
 
     def create(self, validated_data):
         signals_data = validated_data.pop('signals')
