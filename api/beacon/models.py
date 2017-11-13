@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 
 
 class Beacon(models.Model):
-    uuid = models.UUIDField()
+    uuid = models.CharField(max_length=32)
     x = models.IntegerField(default=0)
     y = models.IntegerField(default=0)
     z = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.uuid)
+        return self.uuid
 
 class Time(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -22,7 +22,7 @@ class Time(models.Model):
 class Signal(models.Model):
     beacon = models.ForeignKey(Beacon)
     time = models.ForeignKey(Time, related_name="signals")
-    uuid = models.UUIDField()
+    uuid = models.CharField(max_length=32)
     rssi = models.IntegerField(default=0)
 
 
