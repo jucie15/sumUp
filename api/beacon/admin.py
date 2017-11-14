@@ -19,5 +19,5 @@ class BeaconAdmin(admin.ModelAdmin):
     model = Beacon
 
 @admin.register(Signal)
-class SignalAdmin(admin.ModelAdmin):
+class SignalAdmin(ImportExportModelAdmin):
     model = Signal

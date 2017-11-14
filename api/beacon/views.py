@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, generics, mixins
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from numpy import matrix, matmul
+from numpy import matrix, matmul, shape
 from numpy.linalg import pinv
 from beacon.models import Time, Beacon
 from beacon.serializers import TimeSerializer
@@ -24,7 +24,7 @@ class SignalList(generics.ListCreateAPIView):
             beacon = get_object_or_404(Beacon, uuid=uuid)
             x, y, z = beacon.x, beacon.y, beacon.z
             mat_a_col.append([1, -2*x, -2*y, -2*z])
-            mat_b_col.append([pow(10, (-60-rssi)/60)-x**2-y**2-z**2])
+            mat_b_col.append([pow(10, (-60-rssi)/20)-x**2-y**2-z**2])
 
         mat_a = matrix(mat_a_col)
         mat_b = matrix(mat_b_col)
@@ -38,7 +38,11 @@ class SignalList(generics.ListCreateAPIView):
         serializer = TimeSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            res_data = {'user': data['user'], 'location': self.location_calculate(data['signals'])}
+            mat_x = self.location_calculate(data['signals']).tolist()
+            x = mat_x[1][0]
+            y = mat_x[2][0]
+            z = mat_x[3][0]
+            res_data = {'user': data['user'], 'x': x, 'y': y, 'z': z}
             return Response(data=res_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
