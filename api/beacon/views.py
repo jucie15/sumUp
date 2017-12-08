@@ -44,7 +44,11 @@ class SignalList(generics.ListCreateAPIView):
             x = mat_x[1][0]
             y = mat_x[2][0]
             z = mat_x[3][0]
-            res_data = collections.OrderedDict({'user': data['user'], 'x': x, 'y': y, 'z': z})
+            res_data = collections.OrderedDict()
+            res_data['user'] = data['user']
+            res_data['x'] = x
+            res_data['y'] = y
+            res_data['z'] = z
 
             return Response(data=res_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
