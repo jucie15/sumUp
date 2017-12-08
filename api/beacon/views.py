@@ -6,6 +6,8 @@ from numpy import matrix, matmul, shape
 from numpy.linalg import pinv
 from beacon.models import Time, Beacon
 from beacon.serializers import TimeSerializer
+import json
+import collections
 
 class SignalList(generics.ListCreateAPIView):
     # 유저 관리 View
@@ -42,7 +44,8 @@ class SignalList(generics.ListCreateAPIView):
             x = mat_x[1][0]
             y = mat_x[2][0]
             z = mat_x[3][0]
-            res_data = {'user': data['user'], 'x': x, 'y': y, 'z': z}
+            res_data = collections.OrderedDict({'user': data['user'], 'x': x, 'y': y, 'z': z})
+
             return Response(data=res_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
